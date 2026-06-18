@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+<!-- saved from url=(0045)file:///C:/Users/akira/Downloads/index_2.html -->
+<html lang="ja"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>移籍シミュレーター｜地方競馬 馬主収支判定</title>
+<style>
+  :root{
+    --ink:#14110d;--paper:#f0ead9;--paper2:#e6ddc4;--line:#c4b896;
+    --silk:#7a1f1f;--silk2:#1f4536;--gold:#b08d3a;--warn:#9a3412;
+    --ok:#1f4536;--shadow:rgba(20,17,13,.12);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{-webkit-text-size-adjust:100%}
+  body{font-family:"Hiragino Mincho ProN","Yu Mincho",serif;background:var(--paper);
+    color:var(--ink);line-height:1.6;padding-bottom:40px;
+    background-image:repeating-linear-gradient(0deg,transparent,transparent 38px,rgba(122,31,31,.035) 38px,rgba(122,31,31,.035) 39px);}
+  .wrap{max-width:680px;margin:0 auto;padding:0 16px}
+  header{background:var(--ink);color:var(--paper);padding:22px 16px 18px;border-bottom:3px solid var(--gold)}
+  .eyebrow{font-size:11px;letter-spacing:.4em;color:var(--gold);font-family:"Yu Gothic",sans-serif;font-weight:700}
+  h1{font-size:27px;font-weight:900;letter-spacing:.06em;margin-top:4px;line-height:1.25}
+  .h1-sub{font-size:13px;color:#cdbf9f;margin-top:6px}
+  nav.tabs{display:flex;background:var(--ink);border-bottom:1px solid #2c261c}
+  nav.tabs button{flex:1;background:none;border:none;color:#8a8170;font-family:"Yu Gothic",sans-serif;
+    font-weight:700;font-size:12px;padding:13px 2px;cursor:pointer;letter-spacing:.04em;
+    border-bottom:3px solid transparent}
+  nav.tabs button.on{color:var(--paper);border-bottom-color:var(--silk)}
+  .card{background:var(--paper2);border:1px solid var(--line);border-radius:2px;padding:18px 16px;margin-top:16px}
+  .card-h{font-size:13px;font-family:"Yu Gothic",sans-serif;font-weight:700;letter-spacing:.16em;
+    color:var(--silk);border-bottom:1px solid var(--line);padding-bottom:8px;margin-bottom:14px;
+    display:flex;align-items:center;gap:8px}
+  .card-h .no{font-size:11px;background:var(--silk);color:var(--paper);padding:2px 7px;border-radius:1px}
+  label.fld{display:block;margin-bottom:13px}
+  label.fld .lab{display:block;font-size:12px;color:#5c5343;margin-bottom:4px;font-family:"Yu Gothic",sans-serif}
+  input[type=text],input[type=number],select{width:100%;padding:10px 11px;font-size:16px;
+    border:1px solid var(--line);border-radius:2px;background:#fbf7ec;color:var(--ink);font-family:inherit}
+  input:focus,select:focus{outline:2px solid var(--silk);outline-offset:-1px}
+  .row2{display:flex;gap:10px}.row2>*{flex:1}
+  .abil{margin-bottom:11px}
+  .abil .top{display:flex;justify-content:space-between;font-size:13px;font-family:"Yu Gothic",sans-serif;margin-bottom:2px}
+  .abil .val{font-weight:700;color:var(--silk)}
+  input[type=range]{width:100%;accent-color:var(--silk);height:26px}
+  .btn{width:100%;background:var(--silk);color:var(--paper);border:none;padding:14px;font-size:15px;
+    font-weight:700;font-family:"Yu Gothic",sans-serif;letter-spacing:.16em;border-radius:2px;cursor:pointer;margin-top:6px}
+  .btn:active{transform:translateY(1px)}
+  .btn.ghost{background:none;color:var(--silk);border:1px solid var(--silk)}
+  .btn.sm{padding:9px;font-size:13px;letter-spacing:.08em;margin-top:0}
+  .result-empty{text-align:center;color:#8a8170;padding:30px 10px;font-size:14px}
+  .verdict{text-align:center;padding:16px;margin-bottom:14px;border:2px solid;border-radius:2px}
+  .verdict.go{border-color:var(--ok);background:rgba(31,69,54,.07)}
+  .verdict.cut{border-color:var(--warn);background:rgba(154,52,18,.07)}
+  .verdict .tag{font-size:11px;letter-spacing:.2em;font-family:"Yu Gothic",sans-serif;font-weight:700}
+  .verdict .big{font-size:22px;font-weight:900;margin:5px 0}
+  .verdict.go .big{color:var(--ok)}.verdict.cut .big{color:var(--warn)}
+  .verdict .note{font-size:12.5px;color:#5c5343}
+  table.sim{width:100%;border-collapse:collapse;font-size:13px;margin-top:6px}
+  table.sim th,table.sim td{border-bottom:1px solid var(--line);padding:9px 8px;font-family:"Yu Gothic",sans-serif}
+  table.sim th{color:#5c5343;font-weight:700;width:46%;text-align:left}
+  table.sim td{text-align:right;font-weight:700;font-feature-settings:"tnum"}
+  table.sim td.pos{color:var(--ok)}table.sim td.neg{color:var(--warn)}
+  .chip{display:inline-block;color:var(--paper);font-size:11px;padding:2px 8px;border-radius:1px;
+    margin-left:6px;font-family:"Yu Gothic",sans-serif}
+  .chip.v{background:var(--silk2)}.chip.t{background:var(--warn)}.chip.g{background:var(--gold)}
+  .cmp{margin-top:10px}
+  .cmp-item{display:flex;justify-content:space-between;align-items:center;padding:11px 12px;
+    border:1px solid var(--line);border-radius:2px;margin-bottom:7px;background:#fbf7ec;font-family:"Yu Gothic",sans-serif}
+  .cmp-item .nm{font-weight:700;font-size:14px}
+  .cmp-item .nm small{display:block;color:#8a8170;font-size:11px;font-weight:400;margin-top:1px}
+  .cmp-item .amt{font-weight:900;font-size:15px;font-feature-settings:"tnum"}
+  .cmp-item.best{border-color:var(--gold);border-width:2px;background:rgba(176,141,58,.08)}
+  .cmp-item .amt.pos{color:var(--ok)}.cmp-item .amt.neg{color:var(--warn)}
+  .best-flag{font-size:10px;color:var(--gold);letter-spacing:.16em;font-weight:700}
+
+  /* 移籍先ランキング（1・2・3候補） */
+  .rank-head{font-weight:800;font-size:16px;margin:2px 0 2px;letter-spacing:.02em}
+  .rank-sub{color:#8a8170;font-size:11px;margin-bottom:12px}
+  .rank-item{display:flex;align-items:center;gap:11px;padding:12px 13px;border:1px solid var(--line);
+    border-radius:10px;margin-bottom:8px;background:#fff}
+  .rank-item .medal{flex:0 0 30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+    font-weight:900;font-size:14px;color:#fff;font-feature-settings:"tnum"}
+  .rank-item .body{flex:1;min-width:0}
+  .rank-item .body .nm{font-weight:800;font-size:15px}
+  .rank-item .body .nm small{display:block;color:#8a8170;font-size:11px;font-weight:400;margin-top:1px}
+  .rank-item .amt{text-align:right;flex:0 0 auto}
+  .rank-item .amt .big{font-weight:900;font-size:16px;font-feature-settings:"tnum"}
+  .rank-item .amt .big.pos{color:var(--ok)}.rank-item .amt .big.neg{color:var(--warn)}
+  .rank-item .amt small{display:block;color:#8a8170;font-size:10px;margin-top:1px}
+  .rank-item.g1{border-color:var(--gold);border-width:2px;background:rgba(176,141,58,.07)}
+  .rank-item.g1 .medal{background:linear-gradient(135deg,#caa84a,#9c7a2e)}
+  .rank-item.g2 .medal{background:linear-gradient(135deg,#b9bcc2,#888d94)}
+  .rank-item.g3 .medal{background:linear-gradient(135deg,#c08a55,#9a6a3c)}
+  .rank-item.rest .medal{background:#bdb6a6;font-size:12px}
+  .rank-rest-head{font-size:11px;color:#8a8170;letter-spacing:.1em;margin:14px 0 8px;font-weight:700}
+  .rank-mini-note{font-size:10.5px;color:#8a8170;margin-top:10px;line-height:1.5}
+  .horse-item{display:flex;justify-content:space-between;align-items:center;padding:11px 12px;
+    border:1px solid var(--line);border-radius:2px;margin-bottom:7px;background:#fbf7ec;font-family:"Yu Gothic",sans-serif}
+  .horse-item .hi{font-weight:700;font-size:14px}
+  .horse-item .hi small{display:block;color:#8a8170;font-size:11px;font-weight:400}
+  .del{background:none;border:1px solid var(--warn);color:var(--warn);border-radius:2px;
+    padding:6px 9px;font-size:12px;cursor:pointer;font-family:"Yu Gothic",sans-serif}
+  .admin-track{margin-bottom:10px;border:1px solid var(--line);border-radius:2px;overflow:hidden}
+  .admin-track summary{padding:11px 13px;background:var(--paper2);cursor:pointer;
+    font-family:"Yu Gothic",sans-serif;font-weight:700;font-size:14px;list-style:none;
+    display:flex;justify-content:space-between;align-items:center}
+  .admin-track summary::-webkit-details-marker{display:none}
+  .admin-track summary .reg{font-size:11px;color:#8a8170;font-weight:400}
+  .admin-body{padding:13px;background:#fbf7ec;border-top:1px solid var(--line)}
+  .mini{font-size:11px;color:#8a8170;font-family:"Yu Gothic",sans-serif;margin-bottom:8px;line-height:1.6}
+  .map-row{display:flex;gap:8px;align-items:center;margin-bottom:6px;font-family:"Yu Gothic",sans-serif;font-size:13px}
+  .map-row .from{flex:0 0 38%;color:#5c5343}
+  .map-row select{flex:1;padding:6px 8px;font-size:14px}
+  .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(80px);
+    background:var(--ink);color:var(--paper);padding:11px 20px;border-radius:3px;
+    font-family:"Yu Gothic",sans-serif;font-size:13px;opacity:0;transition:.3s;z-index:50;border:1px solid var(--gold)}
+  .toast.show{transform:translateX(-50%) translateY(0);opacity:1}
+  footer{text-align:center;font-size:11px;color:#8a8170;padding:26px 16px 0;font-family:"Yu Gothic",sans-serif;line-height:1.7}
+  .hidden{display:none!important}
+</style>
+</head>
+<body>
+
+<header><div class="wrap">
+  <div class="eyebrow">JRA → 地方競馬 馬主収支シミュレーター</div>
+  <h1>見切り判定盤</h1>
+  <div class="h1-sub">登録馬を選ぶだけで全場の編入クラス・収支を試算</div>
+</div></header>
+
+<nav class="tabs">
+  <button id="tab-sim" class="on" onclick="showTab(&#39;sim&#39;)">判定</button>
+  <button id="tab-horse" onclick="showTab(&#39;horse&#39;)">馬の登録</button>
+  <button id="tab-adm" onclick="showTab(&#39;adm&#39;)">場データ</button>
+</nav>
+
+<div class="wrap">
+
+<!-- ═══ 判定画面 ═══ -->
+<section id="view-sim">
+  <div class="card">
+    <div class="card-h"><span class="no">選</span>馬を選ぶ</div>
+    <label class="fld">
+      <span class="lab">登録した馬から選択</span>
+      <select id="horseSel" onchange="onPick()"><option value="">（馬を登録してください）</option></select>
+    </label>
+    <div id="pickInfo" class="mini"></div>
+    <div class="row2">
+      <label class="fld"><span class="lab">月の維持費（万円）</span>
+        <input type="number" id="keepCost" value="25" min="0"></label>
+      <label class="fld"><span class="lab">月間出走回数</span>
+        <input type="number" id="runs" value="2" min="1" max="6"></label>
+    </div>
+    <label class="fld">
+      <span class="lab">移籍先</span>
+      <select id="trackSel"><option value="monbetsu">門別（ホッカイドウ）●</option><option value="morioka">盛岡（岩手）●</option><option value="mizusawa">水沢（岩手）●</option><option value="urawa">浦和（南関東）●</option><option value="funabashi">船橋（南関東）●</option><option value="ooi">大井（南関東）●</option><option value="kawasaki">川崎（南関東）●</option><option value="kanazawa">金沢（金沢）●</option><option value="kasamatsu">笠松（東海）●</option><option value="nagoya">名古屋（東海）●</option><option value="sonoda">園田（兵庫）●</option><option value="himeji">姫路（兵庫）●</option><option value="kochi">高知（高知）●</option><option value="saga">佐賀（佐賀）●</option></select>
+    </label>
+    <button class="btn" onclick="runSim()">この移籍先で試算</button>
+    <button class="btn ghost sm" style="margin-top:8px" onclick="runAll()">移籍先ランキング（稼げる順）</button>
+  </div>
+  <div class="card">
+    <div class="card-h"><span class="no">結</span>判定結果</div>
+    <div id="resultBody"><div class="result-empty">馬を登録して選ぶと、編入クラスと収支を表示します。<br>まず「馬の登録」タブで持ち馬を登録してください。</div></div>
+  </div>
+</section>
+
+<!-- ═══ 馬の登録画面 ═══ -->
+<section id="view-horse" class="hidden">
+  <div class="card">
+    <div class="card-h"><span class="no">録</span>馬を登録</div>
+    <label class="fld"><span class="lab">馬名</span>
+      <input type="text" id="hName" placeholder="例：プリティユニバンス"></label>
+    <div class="row2">
+      <label class="fld"><span class="lab">性別</span>
+        <select id="hSex"><option>牡</option><option>牝</option><option>セ</option></select></label>
+      <label class="fld"><span class="lab">年齢</span>
+        <input type="number" id="hAge" value="4" min="2" max="12"></label>
+    </div>
+    <label class="fld">
+      <span class="lab">JRAでの実績（編入判定の基準）</span>
+      <select id="hJra">
+        <option value="g12">重賞勝ち(GⅠ・GⅡ)</option>
+        <option value="g3">重賞勝ち(GⅢ)</option>
+        <option value="op">オープン</option>
+        <option value="w3">3勝クラス</option>
+        <option value="w2">2勝クラス</option>
+        <option value="w1win">1勝クラス(勝ち上がり)</option>
+        <option value="w1" selected="">1勝クラス(その他)</option>
+        <option value="maiden">未勝利</option>
+      </select>
+    </label>
+    <div class="card-h" style="margin-top:6px"><span class="no">岩</span>岩手の格付賞金計算用（任意）</div>
+    <p class="mini">岩手は「稼いだ地区」で控除率が変わります。分かる範囲で本賞金（万円）を入れると、岩手の格付賞金を精密計算します。空欄ならJRA実績から概算します。</p>
+    <label class="fld"><span class="lab">JRA・外国で稼いだ本賞金（80%控除）</span>
+      <input type="number" id="hPzJra" placeholder="例：500" min="0"></label>
+    <label class="fld"><span class="lab">南関東4場で稼いだ本賞金（70%控除）</span>
+      <input type="number" id="hPzNankan" placeholder="例：0" min="0"></label>
+    <label class="fld"><span class="lab">その他地区で稼いだ本賞金（控除なし・満額）<br><small style="color:#8a8170">門別・笠松・名古屋・園田・高知・佐賀など</small></span>
+      <input type="number" id="hPzOther" placeholder="例：0" min="0"></label>
+    <div class="card-h" style="margin-top:6px"><span class="no">力</span>現在の能力（5段階）</div>
+    <div class="abil" data-k="speed"><div class="top"><span>スピード</span><span class="val">3</span></div><input type="range" min="1" max="5" value="3"></div>
+    <div class="abil" data-k="stamina"><div class="top"><span>スタミナ</span><span class="val">3</span></div><input type="range" min="1" max="5" value="3"></div>
+    <div class="abil" data-k="dirt"><div class="top"><span>ダート適性</span><span class="val">3</span></div><input type="range" min="1" max="5" value="3"></div>
+    <div class="abil" data-k="cond"><div class="top"><span>調子・健康</span><span class="val">3</span></div><input type="range" min="1" max="5" value="3"></div>
+    <button class="btn" onclick="addHorse()">この馬を登録する</button>
+  </div>
+  <div class="card">
+    <div class="card-h"><span class="no">馬</span>登録済みの馬</div>
+    <div id="horseList"><div class="result-empty" style="padding:18px">まだ登録がありません。</div></div>
+  </div>
+</section>
+
+<!-- ═══ 場データ画面 ═══ -->
+<section id="view-adm" class="hidden">
+  <div class="card">
+    <div class="card-h"><span class="no">編</span>各場の編入条件と賞金</div>
+    <p class="mini">
+      <strong style="color:var(--silk2)">兵庫（園田・姫路）は公式の転入条件表を反映済み（●）。</strong><br>
+      それ以外の場のJRA実績→編入クラスの対応、および賞金額は仮値（○）です。<br>
+      各場の公式「番組編成要領」を見て、ここで上書きしてください。
+    </p>
+    <div id="admList"></div>
+    <div style="display:flex;gap:8px;margin-top:14px">
+      <button class="btn ghost sm" onclick="exportData()">書き出し</button>
+      <button class="btn ghost sm" onclick="document.getElementById(&#39;imp&#39;).click()">読込</button>
+      <button class="btn ghost sm" style="border-color:var(--warn);color:var(--warn)" onclick="resetData()">初期化</button>
+    </div>
+    <input type="file" id="imp" accept=".json" class="hidden" onchange="importData(event)">
+  </div>
+</section>
+
+<footer>
+  対象14場：門別・盛岡・水沢・浦和・船橋・大井・川崎・金沢・笠松・名古屋・園田・姫路・高知・佐賀<br>
+  ●＝公式データ反映済　○＝仮値（要確認）／実際の編入審査・賞金は各主催者規定に従います
+</footer>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ═══════════════ データ層 ═══════════════
+   各場: jraAdmit = JRA実績キー → 編入クラス名 の対応表
+         classes  = [{name, prize:[1..5着 万円], verified}]
+         official = true なら公式反映済（●）
+   JRA実績キー: g12,g3,op,w3,w2,w1win,w1,maiden
+═══════════════════════════════════════════ */
+const JRA_KEYS=[
+  ["g12","重賞勝ち(GⅠ・Ⅱ)"],["g3","重賞勝ち(GⅢ)"],["op","オープン"],
+  ["w3","3勝クラス"],["w2","2勝クラス"],["w1win","1勝(勝上り)"],
+  ["w1","1勝(その他)"],["maiden","未勝利"]];
+
+// 兵庫＝公式（sonoda-himeji.jp 転入条件表より）
+const HYOGO_ADMIT={g12:"A1",g3:"A1",op:"A1",w3:"A1",w2:"A2",w1win:"B1",w1:"B2",maiden:"C2"};
+
+// 仮の汎用対応（A〜Cの3〜5段階場向け・未確認）
+function genericAdmit(classNames){
+  // classNames は上位→下位の順を想定
+  const top=classNames[0], n=classNames.length;
+  const pick=(frac)=>classNames[Math.min(n-1,Math.round(frac*(n-1)))];
+  return {
+    g12:top, g3:top, op:top,
+    w3:pick(0.15), w2:pick(0.3), w1win:pick(0.45),
+    w1:pick(0.6), maiden:pick(0.85)
+  };
+}
+
+const SEED={
+  "monbetsu":{name:"門別",region:"ホッカイドウ",official:true,
+    classes:[
+      {name:"A1",prize:[300,84,52,35,21]},
+      {name:"A2",prize:[250,70,52,35,17]},
+      {name:"A3",prize:[200,56,42,28,14]},
+      {name:"A4",prize:[150,42,31,21,10]},
+      {name:"B1",prize:[80,22,14,11,5]},
+      {name:"B2",prize:[70,20,13,10,5]},
+      {name:"B3",prize:[60,18,12,9,4]},
+      {name:"B4",prize:[50,14,8,5,3]},
+      {name:"C1",prize:[40,0,0,0,0],winOnly:true},
+      {name:"C2",prize:[40,0,0,0,0],winOnly:true},
+      {name:"C3",prize:[40,0,0,0,0],winOnly:true},
+      {name:"C4",prize:[40,0,0,0,0],winOnly:true},
+    ]},
+  "morioka":{name:"盛岡",region:"岩手",official:true,iwate:true,
+    classes:[{name:"A",prize:[90,36,22,14,10]},{name:"B1",prize:[65,26,16,10,7]},
+      {name:"B2",prize:[50,20,12,8,6]},{name:"C1",prize:[37,15,9,6,4]},{name:"C2",prize:[28,11,7,5,4]}]},
+  "mizusawa":{name:"水沢",region:"岩手",official:true,iwate:true,
+    classes:[{name:"A",prize:[85,34,21,13,9]},{name:"B1",prize:[60,24,15,9,7]},
+      {name:"B2",prize:[47,19,12,7,6]},{name:"C1",prize:[35,14,9,6,4]},{name:"C2",prize:[26,10,7,5,4]}]},
+  "urawa":{name:"浦和",region:"南関東",official:true,nankan:true,
+    classes:[{name:"A1",prize:[210,84,52,31,21]},{name:"A2",prize:[170,68,42,26,18]},
+      {name:"B1",prize:[140,56,35,21,14]},{name:"B2",prize:[110,44,27,17,13]},
+      {name:"B3",prize:[85,34,21,13,10]},{name:"C1",prize:[65,26,16,10,8]},
+      {name:"C2",prize:[50,20,12,8,6]},{name:"C3",prize:[38,15,9,6,5]}]},
+  "funabashi":{name:"船橋",region:"南関東",official:true,nankan:true,
+    classes:[{name:"A1",prize:[215,86,53,32,21]},{name:"A2",prize:[175,70,43,26,18]},
+      {name:"B1",prize:[145,58,36,22,14]},{name:"B2",prize:[115,46,28,18,13]},
+      {name:"B3",prize:[88,35,22,13,10]},{name:"C1",prize:[68,27,17,10,8]},
+      {name:"C2",prize:[52,21,13,8,6]},{name:"C3",prize:[40,16,10,6,5]}]},
+  "ooi":{name:"大井",region:"南関東",official:true,nankan:true,
+    classes:[{name:"A1",prize:[400,160,100,60,40]},{name:"A2",prize:[320,128,80,48,32]},
+      {name:"B1",prize:[280,112,70,42,28]},{name:"B2",prize:[240,96,60,36,24]},
+      {name:"B3",prize:[320,128,80,48,32],verified:true},{name:"C1",prize:[150,60,38,23,15]},
+      {name:"C2",prize:[100,40,25,15,10]},{name:"C3",prize:[80,32,20,12,8],verified:true}]},
+  "kawasaki":{name:"川崎",region:"南関東",official:true,nankan:true,
+    classes:[{name:"A1",prize:[218,87,53,32,21]},{name:"A2",prize:[178,71,43,26,18]},
+      {name:"B1",prize:[148,59,36,22,14]},{name:"B2",prize:[118,47,29,18,13]},
+      {name:"B3",prize:[90,36,22,14,10]},{name:"C1",prize:[69,28,17,10,8]},
+      {name:"C2",prize:[53,21,13,8,6]},{name:"C3",prize:[40,16,10,6,5]}]},
+  "kanazawa":{name:"金沢",region:"金沢",official:true,kanazawa:true,
+    classes:[
+      {name:"A1",prize:[200,64,32,24,20],verified:true},
+      {name:"A2",prize:[100,32,16,12,10],verified:true},
+      {name:"B1",prize:[55,17.6,8.8,6.6,5.5],verified:true},
+      {name:"B2",prize:[50,16,8,6,5],verified:true},
+      {name:"C1",prize:[45,14.4,7.2,5.4,4.5],verified:true},
+      {name:"C2",prize:[43,13.7,6.8,5.1,4.3],verified:true},
+    ]},
+  "kasamatsu":{name:"笠松",region:"東海",official:true,tokai:true,
+    classes:[{name:"A",prize:[60,24,15,9,7]},{name:"B",prize:[40,16,10,6,5]},{name:"C",prize:[28,11,7,5,4]}]},
+  "nagoya":{name:"名古屋",region:"東海",official:true,tokai:true,
+    classes:[{name:"A",prize:[70,28,17,11,8]},{name:"B",prize:[45,18,11,7,5]},{name:"C",prize:[32,13,8,5,4]}]},
+  "sonoda":{name:"園田",region:"兵庫",official:true,
+    classes:[{name:"A1",prize:[105,42,26,16,12]},{name:"A2",prize:[88,35,22,13,10]},
+      {name:"B1",prize:[75,30,18,11,9]},{name:"B2",prize:[58,23,14,9,7]},
+      {name:"C1",prize:[44,18,11,7,5]},{name:"C2",prize:[33,13,8,5,4]},{name:"C3",prize:[28,11,7,4,3]}]},
+  "himeji":{name:"姫路",region:"兵庫",official:true,
+    classes:[{name:"A1",prize:[100,40,25,15,11]},{name:"A2",prize:[85,34,21,13,9]},
+      {name:"B1",prize:[73,29,18,11,8]},{name:"B2",prize:[56,22,14,8,6]},
+      {name:"C1",prize:[43,17,11,7,5]},{name:"C2",prize:[32,13,8,5,4]},{name:"C3",prize:[27,11,7,4,3]}]},
+  "kochi":{name:"高知",region:"高知",official:true,kochi:true,
+    classes:[
+      {name:"A",prize:[180,72,54,36,18],verified:true},
+      {name:"B",prize:[140,56,42,28,14],verified:true},
+      {name:"C1",prize:[100,40,30,20,10],verified:true},
+      {name:"C2",prize:[80,32,24,16,8],verified:true},
+      {name:"C3上",prize:[60,24,18,12,6],verified:true},
+      {name:"C3下",prize:[60,24,18,12,6],verified:true},
+    ]},
+  "saga":{name:"佐賀",region:"佐賀",official:true,saga:true,
+    classes:[
+      {name:"A1",prize:[80,32,18,12,9]},
+      {name:"A2",prize:[60,24,14,9,7]},
+      {name:"B",prize:[50,20,12,8,6]},
+      {name:"C1",prize:[40,14,9,6,4]},
+      {name:"C2",prize:[45,15.8,9,6.8,4.5],verified:true},
+    ]},
+};
+// 門別＝公式（令和8年度 北海道地方競馬番組編成要領 表C・調整表より）
+// JRA実績→当初格付番組賞金額の代表値→A〜C級境界での編入クラス
+const MONBETSU_ADMIT={g12:"A1",g3:"A1",op:"A2",w3:"A4",w2:"B2",w1win:"B4",w1:"C1",maiden:"C4"};
+
+// jraAdmit を各場に付与（兵庫・門別は公式、他は汎用仮値）
+for(const k in SEED){
+  const names=SEED[k].classes.map(c=>c.name);
+  if(k==="sonoda"||k==="himeji") SEED[k].jraAdmit={...HYOGO_ADMIT};
+  else if(k==="monbetsu") SEED[k].jraAdmit={...MONBETSU_ADMIT};
+  else SEED[k].jraAdmit=genericAdmit(names);
+}
+const ORDER=["monbetsu","morioka","mizusawa","urawa","funabashi","ooi","kawasaki","kanazawa","kasamatsu","nagoya","sonoda","himeji","kochi","saga"];
+
+/* ── 保存 ── */
+const DKEY="chihoData_v2", HKEY="chihoHorses_v2";
+let DATA=loadData(), HORSES=loadHorses();
+function loadData(){try{const s=localStorage.getItem(DKEY);if(s)return JSON.parse(s);}catch(e){}return JSON.parse(JSON.stringify(SEED));}
+function saveData(){try{localStorage.setItem(DKEY,JSON.stringify(DATA));}catch(e){}}
+function loadHorses(){try{const s=localStorage.getItem(HKEY);if(s)return JSON.parse(s);}catch(e){}return [];}
+function saveHorses(){try{localStorage.setItem(HKEY,JSON.stringify(HORSES));}catch(e){}}
+
+/* ── ロジック ── */
+function classByName(track,name){return DATA[track].classes.find(c=>c.name===name)||DATA[track].classes[DATA[track].classes.length-1];}
+
+// 岩手の格付賞金を計算（公式の控除率：JRA80%控除/南関70%控除/その他控除なし）
+function iwateRatingPrize(horse){
+  const jra=(horse.pzJra||0)*0.20;      // JRA・外国：20%反映
+  const nankan=(horse.pzNankan||0)*0.30; // 南関東4場：30%反映
+  const other=(horse.pzOther||0)*1.00;   // その他地区：満額
+  return {total:jra+nankan+other, jra, nankan, other,
+    hasInput:(horse.pzJra||0)+(horse.pzNankan||0)+(horse.pzOther||0)>0};
+}
+// 岩手：格付賞金額(万円)→クラス帯の目安（相対方式のため幅で示す）
+// 在籍馬次第で前後する点に注意。境界は実勢の概算
+function iwateClassBand(ratingMan){
+  if(ratingMan>=800) return {cls:"A",band:"A級上位",note:"在籍次第で重賞級と同居"};
+  if(ratingMan>=400) return {cls:"A",band:"A級〜B1",note:""};
+  if(ratingMan>=200) return {cls:"B1",band:"B1〜B2",note:""};
+  if(ratingMan>=80)  return {cls:"B2",band:"B2〜C1",note:""};
+  if(ratingMan>=20)  return {cls:"C1",band:"C1〜C2",note:""};
+  return {cls:"C2",band:"C2",note:"最下級"};
+}
+// JRA実績→概算の格付賞金額（内訳入力がない場合のフォールバック）
+const JRA_RATING_APPROX={g12:1500,g3:900,op:600,w3:450,w2:300,w1win:200,w1:120,maiden:40};
+
+// 金沢の番組賞金を計算（公式の減額率：JRA80%減/南関70%減/その他は控除なし）
+// ※公式は高知兵庫60%減・名古屋50%減もあるが、馬登録の「その他」は全額扱いで簡略化
+function kanazawaPrize(horse){
+  const jra=(horse.pzJra||0)*0.20;      // JRA・重賞：20%反映
+  const nankan=(horse.pzNankan||0)*0.30; // 南関東4場：30%反映
+  const other=(horse.pzOther||0)*1.00;   // その他地区：満額（高知兵庫名古屋は本来一部控除）
+  let total=jra+nankan+other;
+  // 転入馬の最低額調整（総収得賞金ベースの簡易反映）
+  const raw=(horse.pzJra||0)+(horse.pzNankan||0)+(horse.pzOther||0);
+  if(raw>=10000 && total<140) total=140;
+  else if(raw>=2000 && total<70) total=70;
+  return {total,jra,nankan,other,
+    hasInput:raw>0};
+}
+// 金沢：番組賞金→クラス帯（相対要素ありのため幅で示す。境界は実勢概算）
+function kanazawaClassBand(prizeMan){
+  if(prizeMan>=600) return {cls:"A1",band:"A1相当",note:"在籍次第で重賞級"};
+  if(prizeMan>=300) return {cls:"A2",band:"A1〜A2",note:""};
+  if(prizeMan>=150) return {cls:"B1",band:"A2〜B1",note:""};
+  if(prizeMan>=70)  return {cls:"B2",band:"B1〜B2",note:""};
+  if(prizeMan>=30)  return {cls:"C1",band:"B2〜C1",note:""};
+  return {cls:"C2",band:"C1〜C2",note:""};
+}
+
+// 東海地区（笠松・名古屋）：転入馬の収得賞金換算（馬齢別）
+function tokaiPrize(horse){
+  const age=horse.age||4;
+  let rJra,rNankan,rOther;
+  if(age<=4){ rJra=0.30; rNankan=0.45; rOther=1.00; }
+  else if(age<=6){ rJra=0.20; rNankan=0.35; rOther=0.80; }
+  else { rJra=0.15; rNankan=0.25; rOther=0.60; }
+  const jra=(horse.pzJra||0)*rJra;
+  const nankan=(horse.pzNankan||0)*rNankan;
+  const other=(horse.pzOther||0)*rOther;
+  let total=jra+nankan+other;
+  if((horse.pzJra||0)>0) total+=70; // JRA出走歴ありは70万加算
+  return {total,jra,nankan,other,rJra,rNankan,rOther,
+    hasInput:(horse.pzJra||0)+(horse.pzNankan||0)+(horse.pzOther||0)>0};
+}
+// 東海：算出合計金額(万円)→クラス（公式固定境界：C<250<B<450<A）
+function tokaiClass(prizeMan){
+  if(prizeMan>=450) return "A";
+  if(prizeMan>=250) return "B";
+  return "C";
+}
+
+// 佐賀：新規馬の番組賞金換算（第4-1-(3)④減額措置）
+// 2-3歳JRA60%、4歳以上JRA30%、4歳以上他地方50%、地方その他は基本全額
+function sagaPrize(horse){
+  const age=horse.age||4;
+  const jraRate=(age<=3)?0.60:0.30;
+  const otherRate=(age<=3)?1.00:0.50; // 4歳以上の他地方は50%
+  const jra=(horse.pzJra||0)*jraRate;
+  const nankan=(horse.pzNankan||0)*otherRate;
+  const other=(horse.pzOther||0)*otherRate;
+  const total=jra+nankan+other;
+  return {total,jra,nankan,other,jraRate,otherRate,
+    hasInput:(horse.pzJra||0)+(horse.pzNankan||0)+(horse.pzOther||0)>0};
+}
+// 佐賀：番組賞金(万円)→クラス（公式固定境界 古馬）
+function sagaClass(prizeMan){
+  if(prizeMan>=1000) return "A1";
+  if(prizeMan>=600) return "A2";
+  if(prizeMan>=300) return "B";
+  if(prizeMan>=150) return "C1";
+  return "C2";
+}
+
+// 高知：番組賞金の地区別換算（4-(2)）。中央30%/南関50%/兵庫70%/岩手金沢笠松愛知門別佐賀90%/高知100%
+function kochiPrize(horse){
+  const jra=(horse.pzJra||0)*0.30;    // 中央競馬30%
+  const nankan=(horse.pzNankan||0)*0.50; // 南関東50%
+  const other=(horse.pzOther||0)*0.90;   // その他地区（岩手金沢笠松愛知門別佐賀など）90%。兵庫は本来70%
+  const total=jra+nankan+other;
+  return {total,jra,nankan,other,
+    hasInput:(horse.pzJra||0)+(horse.pzNankan||0)+(horse.pzOther||0)>0};
+}
+// 高知：番組賞金(万円)→クラス（公式固定境界 6-(4)）
+function kochiClass(prizeMan){
+  if(prizeMan>1100) return "A";
+  if(prizeMan>700) return "B";
+  if(prizeMan>460) return "C1";
+  if(prizeMan>300) return "C2";
+  if(prizeMan>200) return "C3上";
+  return "C3下";
+}
+
+// ── 南関東：公式ポイント換算（大井番組編成要領 22-(3)）──
+// 地方は本賞金全額、中央は500万以下全額・500万超は[500万+(超過分×0.6)]を1万で除す
+function nankanPoints(horse){
+  const jraEn=(horse.pzJra||0)*10000; // 円
+  let jraPt;
+  if(jraEn<=5000000) jraPt=jraEn/10000;
+  else jraPt=(5000000+(jraEn-5000000)*0.6)/10000;
+  const localPt=((horse.pzNankan||0)+(horse.pzOther||0)); // 地方本賞金(万)=ポイント
+  return {total:jraPt+localPt, jraPt, localPt,
+    hasInput:(horse.pzJra||0)+(horse.pzNankan||0)+(horse.pzOther||0)>0};
+}
+// 公式 格付基準表（大井 12）。[3歳,4歳,5歳,6歳,7歳,8歳以上] のポイント境界
+const NANKAN_GRADE={
+  firstHalf:{ // 1〜6月
+    A1:[2800,3400,4300,5000,5500,5900],A2:[2000,2200,2500,3200,3700,4100],
+    B1:[1500,1700,1900,2200,2700,3000],B2:[1100,1200,1400,1700,2000,2200],
+    B3:[700,800,1000,1300,1600,1800],C1:[0,500,700,1000,1300,1500],
+    C2:[0,200,400,700,1000,1200],C3:[0,0,80,160,240,240]},
+  secondHalf:{ // 7〜12月
+    A1:[3000,3600,4400,5200,5700,5900],A2:[2200,2300,2600,3400,3900,4100],
+    B1:[1700,1800,2000,2500,2900,3000],B2:[1200,1300,1500,1800,2100,2200],
+    B3:[800,900,1100,1400,1700,1800],C1:[500,600,800,1100,1400,1500],
+    C2:[200,300,500,800,1100,1200],C3:[20,80,160,240,240,240]},
+};
+function ageIdx(age){ if(age<=3)return 0; if(age>=8)return 5; return age-3; }
+// 南関：総ポイント＋馬齢＋時期(half) → クラス名
+function nankanClassByPoints(totalPt,age,half){
+  const tbl=NANKAN_GRADE[half==='1'?'firstHalf':'secondHalf'];
+  const i=ageIdx(age);
+  for(const c of ["A1","A2","B1","B2","B3","C1","C2"]){
+    if(totalPt>=tbl[c][i]) return c;
+  }
+  return "C3";
+}
+
+function judgeClass(track,horse){
+  if(DATA[track].iwate){
+    const rp=iwateRatingPrize(horse);
+    const rating=rp.hasInput?rp.total:(JRA_RATING_APPROX[horse.jra]*0.20);
+    const band=iwateClassBand(rating);
+    return classByName(track,band.cls);
+  }
+  if(DATA[track].kanazawa){
+    const kp=kanazawaPrize(horse);
+    const prize=kp.hasInput?kp.total:(JRA_RATING_APPROX[horse.jra]*0.20);
+    const band=kanazawaClassBand(prize);
+    return classByName(track,band.cls);
+  }
+  if(DATA[track].tokai){
+    const tp=tokaiPrize(horse);
+    const prize=tp.hasInput?tp.total:(JRA_RATING_APPROX[horse.jra]*0.30+70);
+    return classByName(track,tokaiClass(prize));
+  }
+  if(DATA[track].saga){
+    const sp=sagaPrize(horse);
+    const prize=sp.hasInput?sp.total:(JRA_RATING_APPROX[horse.jra]*0.30);
+    return classByName(track,sagaClass(prize));
+  }
+  if(DATA[track].kochi){
+    const kp=kochiPrize(horse);
+    const prize=kp.hasInput?kp.total:(JRA_RATING_APPROX[horse.jra]*0.30);
+    return classByName(track,kochiClass(prize));
+  }
+  if(DATA[track].nankan){
+    const np=nankanPoints(horse);
+    if(np.hasInput){
+      const half=(horse.half==='1')?'1':'2'; // 既定は下半期
+      const clsName=nankanClassByPoints(np.total,horse.age,half);
+      return classByName(track,clsName);
+    }
+    // 内訳なし→従来のJRA実績マップにフォールバック
+    const adm=DATA[track].jraAdmit;
+    return classByName(track,adm[horse.jra]||DATA[track].classes[DATA[track].classes.length-1].name);
+  }
+  const adm=DATA[track].jraAdmit;
+  const clsName=adm[horse.jra]||DATA[track].classes[DATA[track].classes.length-1].name;
+  return classByName(track,clsName);
+}
+function rankDist(abilAvg){
+  const t=(abilAvg-1)/4;
+  const win=0.04+t*0.30,p2=0.06+t*0.16,p3=0.08+t*0.10,p4=0.10+t*0.04,p5=0.10;
+  let rest=1-(win+p2+p3+p4+p5); if(rest<0)rest=0;
+  return [win,p2,p3,p4,p5,rest];
+}
+function simulate(track,horse,keepCost,runs){
+  const cls=judgeClass(track,horse);
+  const abilAvg=(horse.speed+horse.stamina+horse.dirt+horse.cond)/4;
+  const dist=rankDist(abilAvg);
+  let perRun=0; for(let i=0;i<5;i++)perRun+=cls.prize[i]*dist[i];
+  const gross=perRun*runs, net=gross*0.80, bal=net-keepCost;
+  const board=dist[0]+dist[1]+dist[2]+dist[3]+dist[4];
+  return {cls,perRun,gross,net,bal,board};
+}
+
+/* ── 画面 ── */
+const yen=n=>Math.round(n).toLocaleString()+"万";
+const yenS=n=>(n>=0?"+":"−")+Math.abs(Math.round(n)).toLocaleString()+"万";
+const jraLabel=k=>(JRA_KEYS.find(x=>x[0]===k)||["","-"])[1];
+
+function currentHorse(){
+  const i=+document.getElementById('horseSel').value;
+  return HORSES[i]||null;
+}
+function onPick(){
+  const h=currentHorse();
+  document.getElementById('pickInfo').textContent = h
+    ? `${h.name}（${h.sex}${h.age}・JRA ${jraLabel(h.jra)}／能力 速${h.speed}持${h.stamina}ダ${h.dirt}調${h.cond}）`
+    : '';
+}
+function runSim(){
+  const h=currentHorse();
+  if(!h){toast('先に馬を登録・選択してください');return;}
+  const keep=+document.getElementById('keepCost').value||0;
+  const runs=+document.getElementById('runs').value||1;
+  const track=document.getElementById('trackSel').value;
+  const r=simulate(track,h,keep,runs);
+  const tn=DATA[track].name, cut=r.bal<0;
+  const sell=Math.max(20,Math.round(r.net*3));
+  const off=DATA[track].official;
+  const isIwate=DATA[track].iwate;
+  const cbadge=off?'<span class="chip g">編入は公式反映</span>':'<span class="chip t">編入は仮値</span>';
+  const pbadge=r.cls.verified?'<span class="chip v">賞金 実額確認済</span>':'<span class="chip t">賞金 仮値</span>';
+
+  let iwateBlock='';
+  let clsLabel=`${tn} ${r.cls.name}`;
+  let basisRow=`<tr><th>判定根拠</th><td>JRA ${jraLabel(h.jra)} ${cbadge}</td></tr>`;
+  if(DATA[track].nankan){
+    const np=nankanPoints(h);
+    if(np.hasInput){
+      basisRow=`<tr><th>判定根拠</th><td>公式ポイント 約${Math.round(np.total)}pt（下半期基準）${cbadge}</td></tr>`;
+    }else{
+      basisRow=`<tr><th>判定根拠</th><td>JRA ${jraLabel(h.jra)}（概算）${cbadge}</td></tr>`;
+    }
+  }
+  if(isIwate){
+    const rp=iwateRatingPrize(h);
+    const rating=rp.hasInput?rp.total:(JRA_RATING_APPROX[h.jra]*0.20);
+    const band=iwateClassBand(rating);
+    clsLabel=`${tn} ${band.band}相当`;
+    const totalRaw=(h.pzJra||0)+(h.pzNankan||0)+(h.pzOther||0);
+    basisRow=`<tr><th>判定根拠</th><td>格付賞金 約${yen(rating)} ${cbadge}</td></tr>`;
+    iwateBlock=`
+    <div class="card" style="margin-top:14px;background:#fbf7ec">
+      <div class="card-h"><span class="no">岩</span>岩手の格付賞金（控除計算）</div>
+      ${rp.hasInput?`
+      <table class="sim">
+        <tr><th>JRA・外国分（80%控除）</th><td>${yen(h.pzJra||0)} → ${yen(rp.jra)}</td></tr>
+        <tr><th>南関東4場分（70%控除）</th><td>${yen(h.pzNankan||0)} → ${yen(rp.nankan)}</td></tr>
+        <tr><th>その他地区分（控除なし）</th><td>${yen(h.pzOther||0)} → ${yen(rp.other)}</td></tr>
+        <tr><th>合計・格付賞金</th><td class="pos">${yen(rp.total)}</td></tr>
+        <tr><th>稼ぎ総額に対する反映率</th><td>${totalRaw>0?Math.round(rp.total/totalRaw*100):0}％</td></tr>
+      </table>
+      <p class="mini" style="margin-top:8px">同じ ${yen(totalRaw)} の稼ぎでも、出身地区で格付賞金が変わります。その他地区（園田など）で稼ぐほど満額カウントされ相手の強いクラスに、JRA・南関帰りは大きく目減りし楽なクラスに入ります。</p>
+      `:`<p class="mini">賞金内訳が未入力のため、JRA実績からの概算です。馬の登録で本賞金の内訳を入れると、控除を反映した精密な格付賞金が出ます。</p>`}
+      <div class="verdict ${rating>=400?'cut':'go'}" style="margin-top:6px">
+        <div class="tag">推定クラス帯</div>
+        <div class="big" style="font-size:19px">${band.band}</div>
+        <div class="note">岩手は2開催ごとに在籍馬全体の格付賞金上位順で線引きする<strong>相対方式</strong>です。${band.note?band.note+'。':''}クラスは在籍馬次第で前後します。</div>
+      </div>
+    </div>`;
+  }
+
+  let kanazawaBlock='';
+  if(DATA[track].kanazawa){
+    const kp=kanazawaPrize(h);
+    const prize=kp.hasInput?kp.total:(JRA_RATING_APPROX[h.jra]*0.20);
+    const band=kanazawaClassBand(prize);
+    clsLabel=`${tn} ${band.band}相当`;
+    const totalRaw=(h.pzJra||0)+(h.pzNankan||0)+(h.pzOther||0);
+    basisRow=`<tr><th>判定根拠</th><td>番組賞金 約${yen(prize)} ${cbadge}</td></tr>`;
+    kanazawaBlock=`
+    <div class="card" style="margin-top:14px;background:#fbf7ec">
+      <div class="card-h"><span class="no">金</span>金沢の番組賞金（減額計算）</div>
+      ${kp.hasInput?`
+      <table class="sim">
+        <tr><th>JRA・重賞分（80%減額）</th><td>${yen(h.pzJra||0)} → ${yen(kp.jra)}</td></tr>
+        <tr><th>南関東4場分（70%減額）</th><td>${yen(h.pzNankan||0)} → ${yen(kp.nankan)}</td></tr>
+        <tr><th>その他地区分（満額）</th><td>${yen(h.pzOther||0)} → ${yen(kp.other)}</td></tr>
+        <tr><th>合計・番組賞金</th><td class="pos">${yen(kp.total)}</td></tr>
+      </table>
+      <p class="mini" style="margin-top:8px">金沢も地区別の減額方式です。JRA・南関帰りは大きく減額され楽なクラスに。なお公式では高知・兵庫は60%減、名古屋は50%減という中間の減額もあります（このアプリの「その他」は満額計算のため、それらは実際より高めに出ます）。</p>
+      `:`<p class="mini">賞金内訳が未入力のため、JRA実績からの概算です。馬の登録で本賞金の内訳を入れると、減額を反映した番組賞金が出ます。</p>`}
+      <div class="verdict ${prize>=300?'cut':'go'}" style="margin-top:6px">
+        <div class="tag">推定クラス帯</div>
+        <div class="big" style="font-size:19px">${band.band}</div>
+        <div class="note">金沢は番組賞金順の格付です。${band.note?band.note+'。':''}クラスは在籍馬次第で前後します。</div>
+      </div>
+    </div>`;
+  }
+
+  let tokaiBlock='';
+  if(DATA[track].tokai){
+    const tp=tokaiPrize(h);
+    const prize=tp.hasInput?tp.total:(JRA_RATING_APPROX[h.jra]*0.30+70);
+    const cls=tokaiClass(prize);
+    clsLabel=`${tn} ${cls}級`;
+    basisRow=`<tr><th>判定根拠</th><td>算出合計金額 約${yen(prize)} ${cbadge}</td></tr>`;
+    tokaiBlock=`
+    <div class="card" style="margin-top:14px;background:#fbf7ec">
+      <div class="card-h"><span class="no">東</span>東海の転入馬換算（馬齢${h.age}歳）</div>
+      ${tp.hasInput?`
+      <table class="sim">
+        <tr><th>JRA分（換算${Math.round(tp.rJra*100)}%）</th><td>${yen(h.pzJra||0)} → ${yen(tp.jra)}</td></tr>
+        <tr><th>南関東分（換算${Math.round(tp.rNankan*100)}%）</th><td>${yen(h.pzNankan||0)} → ${yen(tp.nankan)}</td></tr>
+        <tr><th>その他地区分（換算${Math.round(tp.rOther*100)}%）</th><td>${yen(h.pzOther||0)} → ${yen(tp.other)}</td></tr>
+        ${(h.pzJra||0)>0?`<tr><th>JRA出走歴加算</th><td>+70万</td></tr>`:''}
+        <tr><th>算出合計金額</th><td class="pos">${yen(prize)}</td></tr>
+      </table>
+      <p class="mini" style="margin-top:8px">東海（笠松・名古屋）は算出合計金額でC級(250万未満)・B級(250〜450万)・A級(450万以上)に編入。換算率は馬齢で変わり、JRA・南関帰りは大きく目減りします。なお兵庫・高知の賞金は本来80%換算ですが、このアプリの「その他」は100%計算のため実際よりやや高め（強いクラス寄り）に出ます。</p>
+      `:`<p class="mini">賞金内訳が未入力のため、JRA実績からの概算です。馬の登録で本賞金の内訳を入れると、馬齢別換算を反映した正確な編入が出ます。</p>`}
+      <div class="verdict ${cls==='A'?'cut':'go'}" style="margin-top:6px">
+        <div class="tag">編入クラス（公式の固定境界）</div>
+        <div class="big" style="font-size:19px">${cls}級</div>
+        <div class="note">東海地区は笠松・名古屋で番組賞金・格付が統一されています。境界が数値で明確なため、クラスは一意に確定します。</div>
+      </div>
+    </div>`;
+  }
+
+  let sagaBlock='';
+  if(DATA[track].saga){
+    const sp=sagaPrize(h);
+    const prize=sp.hasInput?sp.total:(JRA_RATING_APPROX[h.jra]*0.30);
+    const cls=sagaClass(prize);
+    clsLabel=`${tn} ${cls}級`;
+    basisRow=`<tr><th>判定根拠</th><td>番組賞金 約${yen(prize)} ${cbadge}</td></tr>`;
+    sagaBlock=`
+    <div class="card" style="margin-top:14px;background:#fbf7ec">
+      <div class="card-h"><span class="no">佐</span>佐賀の新規馬換算（馬齢${h.age}歳）</div>
+      ${sp.hasInput?`
+      <table class="sim">
+        <tr><th>JRA・海外分（換算${Math.round(sp.jraRate*100)}%）</th><td>${yen(h.pzJra||0)} → ${yen(sp.jra)}</td></tr>
+        <tr><th>南関東分（換算${Math.round(sp.otherRate*100)}%）</th><td>${yen(h.pzNankan||0)} → ${yen(sp.nankan)}</td></tr>
+        <tr><th>その他地区分（換算${Math.round(sp.otherRate*100)}%）</th><td>${yen(h.pzOther||0)} → ${yen(sp.other)}</td></tr>
+        <tr><th>番組賞金</th><td class="pos">${yen(prize)}</td></tr>
+      </table>
+      <p class="mini" style="margin-top:8px">佐賀は番組賞金でA1(1000万〜)・A2(600〜1000万)・B(300〜600万)・C1(150〜300万)・C2(150万未満)に編入。新規馬の換算率は馬齢で変わり、4歳以上のJRA帰りは30%まで圧縮されます。${h.age<=3?'2〜3歳はJRA60%・他地方は全額換算です。':'4歳以上は他地方も50%換算となります。'}</p>
+      `:`<p class="mini">賞金内訳が未入力のため、JRA実績からの概算です。馬の登録で本賞金の内訳を入れると、馬齢別換算を反映した正確な編入が出ます。</p>`}
+      <div class="verdict ${prize>=600?'cut':'go'}" style="margin-top:6px">
+        <div class="tag">編入クラス（公式の固定境界）</div>
+        <div class="big" style="font-size:19px">${cls}級</div>
+        <div class="note">佐賀は初出走からの通算本賞金（1〜5着）を換算した番組賞金で格付。境界が数値で明確なため、クラスは一意に確定します。</div>
+      </div>
+    </div>`;
+  }
+
+  let kochiBlock='';
+  if(DATA[track].kochi){
+    const kp=kochiPrize(h);
+    const prize=kp.hasInput?kp.total:(JRA_RATING_APPROX[h.jra]*0.30);
+    const cls=kochiClass(prize);
+    clsLabel=`${tn} ${cls}級`;
+    basisRow=`<tr><th>判定根拠</th><td>番組賞金 約${yen(prize)} ${cbadge}</td></tr>`;
+    kochiBlock=`
+    <div class="card" style="margin-top:14px;background:#fbf7ec">
+      <div class="card-h"><span class="no">高</span>高知の番組賞金（地区別換算）</div>
+      ${kp.hasInput?`
+      <table class="sim">
+        <tr><th>JRA・中央分（換算30%）</th><td>${yen(h.pzJra||0)} → ${yen(kp.jra)}</td></tr>
+        <tr><th>南関東分（換算50%）</th><td>${yen(h.pzNankan||0)} → ${yen(kp.nankan)}</td></tr>
+        <tr><th>その他地区分（換算90%）</th><td>${yen(h.pzOther||0)} → ${yen(kp.other)}</td></tr>
+        <tr><th>番組賞金</th><td class="pos">${yen(kp.total)}</td></tr>
+      </table>
+      <p class="mini" style="margin-top:8px">高知は地区別換算が最も細かく、岩手・金沢・笠松・名古屋・門別・佐賀で稼いだ賞金は90%とほぼ満額カウント。JRA帰りは30%まで圧縮されます。クラスはA(1100万超)・B(1100万以下)・C1(700万以下)・C2(460万以下)・C3上(300万以下)・C3下(200万以下)。なお兵庫(園田姫路)は本来70%換算ですが、このアプリの「その他」は90%計算のため、園田帰りはやや高め（強いクラス寄り）に出ます。</p>
+      `:`<p class="mini">賞金内訳が未入力のため、JRA実績からの概算です。馬の登録で本賞金の内訳を入れると、地区別換算を反映した番組賞金が出ます。</p>`}
+      <div class="verdict ${prize>460?'cut':'go'}" style="margin-top:6px">
+        <div class="tag">編入クラス（公式の固定境界）</div>
+        <div class="big" style="font-size:19px">${cls}級</div>
+        <div class="note">高知は過去約2年の収得賞金を地区別換算した番組賞金で格付。境界が数値で明確なため、クラスは一意に確定します。賞金額も全クラス実額確認済みです。</div>
+      </div>
+    </div>`;
+  }
+
+  let html=`
+  <div class="verdict ${cut?'cut':'go'}">
+    <div class="tag">${clsLabel}${isIwate?'':'クラス編入見込み'}</div>
+    <div class="big">${cut?'見切り推奨':'継続で黒字圏'}</div>
+    <div class="note">${h.name}／想定月間収支 <strong>${yenS(r.bal)}</strong></div>
+  </div>
+  <table class="sim">
+    <tr><th>編入クラス</th><td>${clsLabel}</td></tr>
+    ${basisRow}
+    <tr><th>賞金データ</th><td>${pbadge}</td></tr>
+    <tr><th>掲示板(5着内)率</th><td>${Math.round(r.board*100)}％</td></tr>
+    <tr><th>1走あたり期待賞金</th><td>${yen(r.perRun)}</td></tr>
+    <tr><th>想定月間賞金(総額)</th><td>${yen(r.gross)}</td></tr>
+    <tr><th>馬主手取り(控除後)</th><td>${yen(r.net)}</td></tr>
+    <tr><th>月の維持費</th><td class="neg">−${yen(keep)}</td></tr>
+    <tr><th>差引・月間収支</th><td class="${cut?'neg':'pos'}">${yenS(r.bal)}</td></tr>
+  </table>${iwateBlock}${kanazawaBlock}${tokaiBlock}${sagaBlock}${kochiBlock}`;
+  if(cut) html+=`<div class="verdict cut" style="margin-top:14px">
+    <div class="tag">サラブレッドオークション出品推奨</div>
+    <div class="big" style="font-size:18px">目標売却額 ${yen(sell)}前後</div>
+    <div class="note">このクラス・維持費では持ち出しになる見込み。早期売却で損失を抑える判断も。</div></div>`;
+  document.getElementById('resultBody').innerHTML=html;
+}
+function runAll(){
+  const h=currentHorse();
+  if(!h){toast('先に馬を登録・選択してください');return;}
+  const keep=+document.getElementById('keepCost').value||0;
+  const runs=+document.getElementById('runs').value||1;
+  const rows=ORDER.map(t=>{const r=simulate(t,h,keep,runs);
+    return {name:DATA[t].name,cls:r.cls.name,net:r.net,bal:r.bal,perRun:r.perRun,off:DATA[t].official};})
+    .sort((a,b)=>b.net-a.net); // 稼げる順＝馬主手取り(net)の高い順
+
+  const medals=['1','2','3'];
+  const gcls=['g1','g2','g3'];
+  const label=['第1候補','第2候補','第3候補'];
+
+  let html=`<div class="rank-head">${h.name} の移籍先ランキング</div>
+    <div class="rank-sub">JRA ${jraLabel(h.jra)}／${h.sex}${h.age}歳・月${runs}走・維持費${yen(keep)}　を基準に、馬主手取りの高い順</div>`;
+
+  // 1〜3候補
+  rows.slice(0,3).forEach((r,i)=>{
+    html+=`<div class="rank-item ${gcls[i]}">
+      <div class="medal">${medals[i]}</div>
+      <div class="body"><div class="nm">${r.name} <small>${label[i]}・${r.cls}クラス編入${r.off?'（公式）':'（仮）'}</small></div></div>
+      <div class="amt"><div class="big ${r.net>=0?'pos':'neg'}">${yen(r.net)}</div><small>手取り／月　収支 ${yenS(r.bal)}</small></div>
+    </div>`;
+  });
+
+  // 4位以下
+  if(rows.length>3){
+    html+=`<div class="rank-rest-head">4位以下</div>`;
+    rows.slice(3).forEach((r,i)=>{
+      html+=`<div class="rank-item rest">
+        <div class="medal">${i+4}</div>
+        <div class="body"><div class="nm">${r.name} <small>${r.cls}クラス${r.off?'（公式）':'（仮）'}</small></div></div>
+        <div class="amt"><div class="big ${r.net>=0?'pos':'neg'}">${yen(r.net)}</div><small>収支 ${yenS(r.bal)}</small></div>
+      </div>`;
+    });
+  }
+
+  html+=`<div class="rank-mini-note">「手取り／月」は1走あたり期待賞金×月間走数×0.8（進上金等控除後）。維持費を引く前の額です。クラス・賞金は各場の公式番組編成要領に基づきますが、賞金額の一部は実勢推定を含みます。馬の能力設定と賞金内訳によって結果が変わります。</div>`;
+
+  document.getElementById('resultBody').innerHTML=html;
+}
+
+/* ── 馬の登録 ── */
+function addHorse(){
+  const name=document.getElementById('hName').value.trim();
+  if(!name){toast('馬名を入れてください');return;}
+  const ab={};document.querySelectorAll('#view-horse .abil').forEach(el=>ab[el.dataset.k]=+el.querySelector('input').value);
+  const pzJra=+document.getElementById('hPzJra').value||0;
+  const pzNankan=+document.getElementById('hPzNankan').value||0;
+  const pzOther=+document.getElementById('hPzOther').value||0;
+  HORSES.push({name,sex:document.getElementById('hSex').value,age:+document.getElementById('hAge').value||4,
+    jra:document.getElementById('hJra').value,speed:ab.speed,stamina:ab.stamina,dirt:ab.dirt,cond:ab.cond,
+    pzJra,pzNankan,pzOther});
+  saveHorses();fillHorseSel();renderHorses();
+  document.getElementById('hName').value='';
+  document.getElementById('hPzJra').value='';document.getElementById('hPzNankan').value='';document.getElementById('hPzOther').value='';
+  toast('登録しました');
+}
+function delHorse(i){HORSES.splice(i,1);saveHorses();fillHorseSel();renderHorses();onPick();toast('削除しました');}
+function renderHorses(){
+  const el=document.getElementById('horseList');
+  if(!HORSES.length){el.innerHTML='<div class="result-empty" style="padding:18px">まだ登録がありません。</div>';return;}
+  el.innerHTML=HORSES.map((h,i)=>`<div class="horse-item">
+    <div class="hi">${h.name}<small>${h.sex}${h.age}・JRA ${jraLabel(h.jra)}／速${h.speed} 持${h.stamina} ダ${h.dirt} 調${h.cond}</small></div>
+    <button class="del" onclick="delHorse(${i})">削除</button></div>`).join('');
+}
+function fillHorseSel(){
+  const sel=document.getElementById('horseSel');
+  if(!HORSES.length){sel.innerHTML='<option value="">（馬を登録してください）</option>';}
+  else sel.innerHTML=HORSES.map((h,i)=>`<option value="${i}">${h.name}（${h.sex}${h.age}・${jraLabel(h.jra)}）</option>`).join('');
+}
+
+/* ── 場データ編集 ── */
+function fillTrackSel(){
+  document.getElementById('trackSel').innerHTML=ORDER.map(t=>`<option value="${t}">${DATA[t].name}（${DATA[t].region}）${DATA[t].official?'●':'○'}</option>`).join('');
+}
+function renderAdm(){
+  const list=document.getElementById('admList');
+  list.innerHTML=ORDER.map(t=>{
+    const tr=DATA[t];
+    const admRows=JRA_KEYS.map(([k,lab])=>`<div class="map-row">
+      <span class="from">${lab}</span>
+      <select onchange="updAdmit('${t}','${k}',this.value)">
+        ${tr.classes.map(c=>`<option ${tr.jraAdmit[k]===c.name?'selected':''}>${c.name}</option>`).join('')}
+      </select></div>`).join('');
+    const prizeRows=tr.classes.map((c,ci)=>`<div class="map-row">
+      <span class="from">${c.name}${c.verified?' ●':''}</span>
+      ${c.prize.map((p,pi)=>`<input type="number" value="${p}" style="flex:1;padding:6px 4px;font-size:13px;text-align:center" onchange="updPrize('${t}',${ci},${pi},+this.value)">`).join('')}
+    </div>`).join('');
+    return `<details class="admin-track">
+      <summary><span>${tr.name} ${tr.official?'●':'○'}</span><span class="reg">${tr.region}・${tr.classes.length}クラス ▾</span></summary>
+      <div class="admin-body">
+        <div class="mini"><strong>JRA実績 → 編入クラス</strong></div>
+        ${admRows}
+        <div class="mini" style="margin-top:12px"><strong>本賞金（万円）1着〜5着</strong></div>
+        ${prizeRows}
+      </div></details>`;
+  }).join('');
+}
+function updAdmit(t,k,v){DATA[t].jraAdmit[k]=v;saveData();toast('保存しました');}
+function updPrize(t,ci,pi,v){DATA[t].classes[ci].prize[pi]=v;saveData();toast('保存しました');}
+
+/* ── 入出力 ── */
+function exportData(){const blob=new Blob([JSON.stringify({DATA,HORSES},null,2)],{type:'application/json'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='chiho_keiba_data.json';a.click();toast('書き出しました');}
+function importData(e){const f=e.target.files[0];if(!f)return;const rd=new FileReader();
+  rd.onload=()=>{try{const o=JSON.parse(rd.result);if(o.DATA)DATA=o.DATA;if(o.HORSES)HORSES=o.HORSES;
+    saveData();saveHorses();fillTrackSel();fillHorseSel();renderHorses();renderAdm();toast('読み込みました');}
+    catch(x){toast('読み込めませんでした');}};rd.readAsText(f);}
+function resetData(){if(confirm('場データを初期状態に戻します（登録馬は残ります）。よろしいですか？')){
+  DATA=JSON.parse(JSON.stringify(SEED));for(const k in DATA){const names=DATA[k].classes.map(c=>c.name);
+    DATA[k].jraAdmit=(k==="sonoda"||k==="himeji")?{...HYOGO_ADMIT}:(k==="monbetsu")?{...MONBETSU_ADMIT}:genericAdmit(names);}
+  saveData();fillTrackSel();renderAdm();toast('初期化しました');}}
+
+/* ── タブ ── */
+function showTab(t){
+  ['sim','horse','adm'].forEach(x=>{
+    document.getElementById('view-'+x).classList.toggle('hidden',x!==t);
+    document.getElementById('tab-'+x).classList.toggle('on',x===t);
+  });
+  if(t==='adm')renderAdm();
+  if(t==='horse')renderHorses();
+}
+document.querySelectorAll('.abil').forEach(el=>{
+  const inp=el.querySelector('input'),val=el.querySelector('.val');
+  inp.addEventListener('input',()=>val.textContent=inp.value);
+});
+let tt;function toast(m){const el=document.getElementById('toast');el.textContent=m;el.classList.add('show');
+  clearTimeout(tt);tt=setTimeout(()=>el.classList.remove('show'),1600);}
+
+/* 初期化 */
+fillTrackSel();fillHorseSel();renderHorses();onPick();
+</script>
+
+
+</body></html>
